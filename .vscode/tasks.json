@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [      // 任务配置
+        {
+            "label": "C++ Build",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                "${file}",
+                "-o",
+                "${workspaceFolder}/build/${fileBasenameNoExtension}.exe"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "编译器: g++"
+        }
+    ]
+}
