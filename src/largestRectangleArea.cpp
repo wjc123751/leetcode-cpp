@@ -4,9 +4,6 @@
 
 using namespace std;
 
-// 每个柱子宽度为 1，以某根柱子的高度为矩形高，向左右扩展，找到左右第一个比它矮的柱子，
-// 中间的宽度 × 当前高度，就是这个柱子能围成的最大矩形面积，最终取全局最大值。
-
 // O(n²)
 // class Solution
 // {
@@ -48,6 +45,9 @@ using namespace std;
 //     }
 // };
 
+// 每个柱子宽度为 1，以某根柱子的高度为矩形高，向左右扩展，找到左右第一个比它矮的柱子，
+// 中间的宽度 × 当前高度，就是这个柱子能围成的最大矩形面积，最终取全局最大值。
+
 // O (n) 单调栈
 class Solution
 {
@@ -55,27 +55,25 @@ public:
     int largestRectangleArea(vector<int> &heights)
     {
         int maxarea = 0;
-        stack<int> st;        // 栈里存下标，保持高度单调递增
-        heights.push_back(0); // 末尾加0，强迫栈里所有剩下的元素全部弹出来计算面积
-
+        stack<int> st;
+        heights.push_back(0);       // 2, 4 这种情况
         for (int i = 0; i < heights.size(); ++i)
         {
-            // 遇到更小的高度，弹出栈顶计算面积
             while (!st.empty() && heights[i] < heights[st.top()])
             {
-                // 弹出的这个柱子：要计算以它为高的矩形
-                int h = heights[st.top()];
+                int idxh = st.top();
                 st.pop();
-
-                // 左边第一个比它小的：新的栈顶！
-                // 右边第一个比它小的：当前 i！
-                int w;
+                int l;
                 if (st.empty())
-                    w = i;
+                {
+                    l = -1;
+                }
                 else
-                    w = i - st.top() - 1; // 宽度 = 右 - 左 - 1
-
-                maxarea = max(maxarea, h * w);
+                {
+                    l = st.top();
+                }
+                int area = heights[idxh] * (i - l - 1);
+                maxarea = max(area, maxarea);
             }
             st.push(i);
         }
@@ -87,7 +85,7 @@ public:
 int main()
 {
     Solution s;
-    vector<int> height = {2, 1, 5, 6, 2, 3};
+    vector<int> height = {2, 4};
     int res = s.largestRectangleArea(height);
     cout << res;
 

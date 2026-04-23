@@ -1,9 +1,8 @@
 #include <iostream>
 #include <vector>
+#include <stack>
 #include <algorithm>
 using namespace std;
-
-// 核心原理：每个柱子上方能接的雨水量 = 左右两侧最高柱子的较小值 - 当前柱子高度
 
 // 暴力解法 O (n²) 超时
 // class Solution
@@ -28,31 +27,64 @@ using namespace std;
 // };
 
 // 双指针 O(n)
+// 每个柱子，只算它头顶那一条竖线的积水量
+// class Solution
+// {
+// public:
+//     int trap(vector<int> &height)
+//     {
+//         int res = 0;
+//         int left = 0;
+//         int right = height.size() - 1;
+//         int lefthmax = 0;
+//         int righthmax = 0;
+//         while (left < right)
+//         {
+//             lefthmax = max(lefthmax, height[left]);
+//             righthmax = max(righthmax, height[right]);
+
+//             if (lefthmax < righthmax)
+//             {
+//                 res += lefthmax - height[left];
+//                 left++;
+//             }
+//             else
+//             {
+//                 res += righthmax - height[right];
+//                 right--;
+//             }
+//         }
+
+//         return res;
+//     }
+// };
+
+// 核心原理：每个柱子上方能接的雨水量 = 左右两侧更高柱子的较小值 - 当前柱子高度
+
+// 单调栈 O(n)
+// 单调栈算的不是「竖条雨水」，而是「一整个横条凹槽的雨水」！
 class Solution
 {
 public:
     int trap(vector<int> &height)
     {
         int res = 0;
-        int left = 0;
-        int right = height.size() - 1;
-        int lefthmax = 0;
-        int righthmax = 0;
-        while (left < right)
+        stack<int> st;
+        for (int i = 0; i < height.size(); ++i)
         {
-            lefthmax = max(lefthmax, height[left]);
-            righthmax = max(righthmax, height[right]);
-
-            if (lefthmax < righthmax)
+            while (!st.empty() && height[i] > height[st.top()])
             {
-                res += lefthmax - height[left];
-                left++;
+                int h = height[st.top()];
+                st.pop();
+                if (st.empty())  // 栈空了，不能再算！
+                {
+                    break;
+                }
+                int minh = min(height[i], height[st.top()]);
+                int w = i - st.top() - 1;
+                res += w * (minh - h);
             }
-            else
-            {
-                res += righthmax - height[right];
-                right--;
-            }
+            st.push(i);
         }
 
         return res;
