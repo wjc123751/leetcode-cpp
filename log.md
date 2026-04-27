@@ -85,3 +85,15 @@ maxSum = max(maxSum, cur);
 中序	出栈时	左走完就出栈	左走完后
 后序	右走完后	访问后才出栈	需要 pre 判断
 
+# 二分查找
+1. 为什么是 while (left < right) 而不是 left <= right？
+一句话答案：因为这个算法用的是「不断收缩区间，最终只剩一个元素」的思路，不是「搜索元素」的思路。
+区别在这里：
+① while (left <= right)
+用于：寻找某个目标值是否存在 循环结束时：left = right + 1，区间空了
+② while (left < right)
+用于：寻找极值（最大 / 最小）循环结束时：left == right区间里只剩下最后一个元素 → 就是答案！
+2. 为什么是 mid = left + (right-left)/2 而不是 (left+right)/2？
+一句话答案：防止整数溢出！
+left + right 会变成 40 亿超过 int 最大值（约 21 亿）→ 溢出 → 变成负数 → 程序崩溃！
+
