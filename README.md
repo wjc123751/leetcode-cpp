@@ -97,6 +97,10 @@ C++ 软件开发岗面试，算法题特点：
 - 41. 缺失的第一个正数
 - 82. 删除排序链表中的重复元素 II
 
+## add
+- 81. 搜索旋转排序数组 II
+数据结构定义及其基本操作
+
 # 三、C++ 刷题必须掌握的 STL（面试直接加分）
 - vector、string、list
 - stack、queue、priority_queue
