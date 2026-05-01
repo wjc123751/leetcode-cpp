@@ -101,7 +101,7 @@ C++ 软件开发岗面试，算法题特点：
 - 81. 搜索旋转排序数组 II
 数据结构定义及其基本操作
 
-# 三、C++ 刷题必须掌握的 STL（面试直接加分）
+# 三、C++ 刷题必须掌握的 STL
 - vector、string、list
 - stack、queue、priority_queue
 - unordered_map / map

@@ -117,19 +117,6 @@ ListNode *LocateElem(ListNode *head, ElemType e)
     return p;
 }
 
-// ================= 销毁 =================
-void DestroyList(ListNode *&head)
-{
-    ListNode *cur = head;
-    while (cur)
-    {
-        ListNode *tmp = cur;
-        cur = cur->next;
-        delete tmp;
-    }
-    head = nullptr; // 防止野指针
-}
-
 // ================= 打印 =================
 void PrintList(ListNode *head)
 {
@@ -141,6 +128,19 @@ void PrintList(ListNode *head)
         cur = cur->next;
     }
     cout << endl;
+}
+
+// ================= 销毁 =================
+void DestroyList(ListNode *&head)
+{
+    ListNode *cur = head;
+    while (cur)
+    {
+        ListNode *tmp = cur;
+        cur = cur->next;
+        delete tmp;
+    }
+    head = nullptr; // 防止野指针
 }
 
 // ================= 主函数 =================
