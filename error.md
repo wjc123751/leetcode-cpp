@@ -5,3 +5,6 @@ vector 下标越界（负数下标导致无符号溢出）
 2. AddressSanitizer: heap-buffer-overflow on address ...
 READ of size 4 ...
 heap-buffer-overflow（数组下标越界）
+3. Line 1122: Char 9: runtime error: reference binding to null pointer of type 'int' (stl_vector.h)
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior /usr/lib/gcc/x86_64-linux-gnu/14/../../../../include/c++/14/bits/stl_vector.h:1131:9
+数组下标越界 / 访问空数组

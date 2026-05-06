@@ -32,7 +32,7 @@ public:
 int main()
 {
     Solution s;
-    vector<int> nums = {1, 2, 0};
+    vector<int> nums = {3,4,-1,1};
     int res = s.firstMissingPositive(nums);
     cout << res;
 
