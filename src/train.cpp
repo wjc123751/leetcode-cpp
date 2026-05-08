@@ -9,42 +9,46 @@ using namespace std;
 
 class Solution {
 public:
-    string reverseWords(string s) {
-        vector<string> vs;
-        string tmp;
-        for(int i = 0; i < s.size(); ++i){
-            if(s[i] != ' '){
-                tmp += s[i];
-            }
-            else{
-                if(tmp.empty()){
-                    continue;
+    int findRadius(vector<int>& houses, vector<int>& heaters) {
+        int maxr = 0;
+        for(int h : houses){
+            maxr = max(maxr, h);
+        }
+        for(int h : heaters){
+            maxr = max(maxr, h);
+        }
+        // int r;
+        for(int r = 0; r <= maxr; ++r){
+            bool allCovered = true;
+            for(int house : houses){
+                bool covered = false;
+                for(int heater : heaters){
+                    int left = max(heater - r, 1);
+                    int right = heater + r;
+                    if(house >= left && house <= right){
+                        covered = true;
+                        break;
+                    }
                 }
-                else{
-                    vs.push_back(tmp);
-                    tmp = "";
+                if(!covered){
+                    allCovered = false;
+                    break;
                 }
             }
-        }
-        if(!tmp.empty()){
-            vs.push_back(tmp);
-        }
-        string res;
-        for(int i = vs.size() - 1; i >= 0; --i){
-            res += vs[i];
-            if(i > 0){
-                res += ' ';
+            if(allCovered){
+                return r;
             }
         }
-        return res;
+        return maxr;
     }
 };
 
 int main()
 {
     Solution s;
-    string str = "  hello world  ";
-    s.reverseWords(str);
+    vector<int> houses = {1};
+    vector<int> heaters = {1,2,3,4};
+    int r = s.findRadius(houses, heaters);
 
     return 0;
 }
