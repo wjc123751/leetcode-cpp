@@ -67,6 +67,17 @@ void DFS(Graph *g, int u)
     }
 }
 
+int CountConnected1(Graph* g){
+    int cnt = 0;
+    for(int i = 0; i < g->vertexNum; ++i){
+        if(!visited[i]){
+            cnt++;
+            DFS(g, i);
+        }
+    }
+    return cnt;
+}
+
 void DFS_Stack(Graph* g, int start){
     stack<int> st;
     st.push(start);
@@ -85,6 +96,16 @@ void DFS_Stack(Graph* g, int start){
     }
 }
 
+int CountConnected2(Graph* g){
+    int cnt = 0;
+    for(int i = 0; i < g->vertexNum; ++i){
+        if(!visited[i]){
+            cnt++;
+            DFS_Stack(g, i);
+        }
+    }
+    return cnt;
+}
 
 void BFS(Graph *g, int start)
 {
@@ -106,6 +127,17 @@ void BFS(Graph *g, int start)
             }
         }
     }
+}
+
+int CountConnected3(Graph* g){
+    int cnt = 0;
+    for(int i = 0; i < g->vertexNum; ++i){
+        if(!visited[i]){
+            cnt++;
+            BFS(g, i);
+        }
+    }
+    return cnt;
 }
 
 int main()

@@ -87,6 +87,20 @@ void DFSMatrix(MatrixGraph *mg, int u)
     }
 }
 
+int CountConnected1(MatrixGraph *mg)
+{
+    int cnt = 0;
+    for (int i = 0; i < mg->vertexNum; ++i)
+    {
+        if (!visited[i])
+        {
+            cnt++;
+            DFSMatrix(mg, i);
+        }
+    }
+    return cnt;
+}
+
 void DFSMatrixStack(MatrixGraph *mg, int start)
 {
     stack<int> st;
@@ -108,6 +122,20 @@ void DFSMatrixStack(MatrixGraph *mg, int start)
     }
 }
 
+int CountConnected2(MatrixGraph *mg)
+{
+    int cnt = 0;
+    for (int i = 0; i < mg->vertexNum; ++i)
+    {
+        if (!visited[i])
+        {
+            cnt++;
+            DFSMatrixStack(mg, i);
+        }
+    }
+    return cnt;
+}
+
 void BFSMatrixQueue(MatrixGraph *mg, int start)
 {
     queue<int> q;
@@ -127,6 +155,20 @@ void BFSMatrixQueue(MatrixGraph *mg, int start)
             }
         }
     }
+}
+
+int CountConnected3(MatrixGraph *mg)
+{
+    int cnt = 0;
+    for (int i = 0; i < mg->vertexNum; ++i)
+    {
+        if (!visited[i])
+        {
+            cnt++;
+            BFSMatrixQueue(mg, i);
+        }
+    }
+    return cnt;
 }
 
 int main()
