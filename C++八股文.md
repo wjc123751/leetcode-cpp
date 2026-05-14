@@ -282,8 +282,6 @@ this就是当前对象的地址，由编译器隐式传入非静态成员函数
 多线程同时访问、操作同一份代码或数据，不会出现数据竞争、逻辑错乱就是线程安全
 ### C++模板
 模板函数通常在头文件定义，因为模板的实现需要在编译时可见
-### override 
-标记重写虚函数的关键字
 ### 访问已释放的内存
 是未定义行为，导致程序崩溃或输出不确定的值
 ### 异常
@@ -317,7 +315,7 @@ using namespace会引用命名空间的所有符合
 命名空间可以解决命名冲突
 ### C++类型转换
 static_cast 支持多态类型的向下转换，但不做运行时类型检查，而dynamic_cast会做运行时检查，转换失败返回nullptr
-dynamic_cast只能用于包含虚函数的多态类
+dynamic_cast只能用于包含虚函数的多态类，dynamic_cast在基类有虚函数时可以向下转型，把父类指针转换为子类指针
 const_cast是移除/添加const/volatile限定符，不能修改真正的常量值，能用来修改const引用/指针指向的非const变量
 reinterpret_cast是最不安全的转换，直接把内存的二进制数据解释为目标类型，不做检查
 ### const/volatile
@@ -328,4 +326,108 @@ std::move将左值转换为右值引用
 移动构造函数通常接受非const的右值引用
 移动构造可以避免不必要的深拷贝
 std::unique_ptr支持移动语义
+# C++模板元编程
+// 主模板
+template<int N>
+struct factorial{
+    static const int value = factorial<N - 1>::value;
+}
 
+// 特化模板
+template<>
+struct factorial<0>{
+    static const int value = 1;
+}
+### std::forward
+用于完美转发，配合函数模板参数推导保持参数的左值、右值属性
+### std::thread
+C++必须在std::thread销毁前调用join()或detach()，否则程序会终止
+join() 阻塞等待线程执行完毕，线程结束、释放资源
+detach() 把C++线程对象和系统线程断开连接，线程自己后台运行
+调用后t.joinable()变成false
+### constexpr
+constexpr 是一个修饰符，用在函数上表示纯函数:相同输入必须得到相同输出，无副作用
+constexpr 修饰函数，可以在编译器执行计算
+constexpr 函数C++11必须只有一条返回语句
+constexpr 函数可以调用其他 constexpr 函数
+constexpr 函数参数和返回值必须是字面类型-可以用来计算的类型
+constexpr 函数不允许修改非局部变量
+### decltype获取类型
+#include <type_traits>
+is_same_v<A, B>判断A、B类型是否相同
+### RAII机制-资源获取就初始化
+通过构造函数获取资源，析构函数释放资源
+RAII是C++中基于C++对象的生命周期(栈对象自动销毁的特性)的手动资源管理机制
+RAII核心定义:资源的获取和对象的初始化绑定在一起，资源的释放和对象的销毁绑定在一起
+不仅用于内存管理，还用于文件句柄std::fstream、锁std::lock_guard、网络连接等需要手动释放的资源
+C++标准库几乎所有资源都是基于RAII实现的，如string vector thread 智能指针
+### std::atomic
+只能用于基础数据类型变量
+### std::variant
+安全的联合体，能存多种类型的其中一种，同一时刻只能存一个类型
+### 对象切片
+当子类对象按值传递给父类形参时:即使子类重写了虚函数，也只会调用基类函数，要想实现多态必须改为指针或引用传递
+### noexcept
+这个函数保证不会抛出异常，抛出异常会调用std::terminate
+帮助编译器优化代码
+是函数签名的一部分，影响函数重载
+### mutable
+mutable修饰的变量，哪怕是const，也能修改
+### std::optional
+专门用于表示可能有值可能无值的场景
+### alignas alignof
+alignas 强制变量的内存对齐字节数
+alignof 查询变量的内存对齐字节数
+### string_view
+不拥有字符串，只指向已有的字符串，只读
+### concept
+给模板加限制条件，用于模板参数的约束
+可以在任何作用域定义
+### is_integral_v<T>
+判断T是不是整型
+### std::jthread
+自动调用joint()
+支持协作式中断
+无需手动资源管理
+### 为什么静态成员函数不能定义为虚函数
+静态成员函数属于类，虚函数属于对象
+### 内联函数
+inline 编译时把函数直接嵌入函数调用处
+### 为什么析构函数不能重载
+析构函数没有参数，不满足重载条件
+### 访问
+vector 随机访问
+list 前后遍历
+map/unordered_map 按键访问
+### inline函数
+适合代码量小、无循环、无递归的函数
+代码量大、有循环、有递归的函数编译期展开时，代码严重膨胀
+### 5个C++不能重载的运算符
+. * 作用域:: 三元运算符 sizeof
+### override 
+标记重写虚函数的关键字
+### 构造函数
+可以重载 不能static(this) 可以inline
+### 析构函数
+不能重载 不能stctic(this) 可以inline
+### 访问权限继承后的访问变化
+基类权限    public继承  protected继承   private继承
+public      public      protected       private
+protected   protected   protected       private
+private     不可访问    不可访问        不可访问
+### 隐藏
+派生类定义了和基类同名的函数，但没有构成重写，就会把基类同名函数屏蔽掉，构成隐藏
+### 迭代器失效场景
+string(动态字符数组)
+vector(动态数组) 扩容全失效 中间插入删除当前和后面全失效
+list(双向链表) 仅被删除的迭代器失效
+map/set(红黑树) 仅被删除的迭代器失效
+unordered_map/unordered_set(哈希表) 扩容全失效 仅被删除的迭代器失效
+### 重载运算符不能改变的
+优先级 操作数 结合性
+### 为什么引用不能作为数组元素
+数组元素是可以赋值，可以改变的；引用必须初始化，不能改变指向；
+### 内存抖动的根本原因
+内存中的进程太多了，页面频繁换入换出
+### 有效防止内存抖动的方法
+减少多道程序度也就是减少内存中的进程数
