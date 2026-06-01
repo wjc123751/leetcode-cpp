@@ -1,14 +1,10 @@
 #include <iostream>
 using namespace std;
 
-// 成员只有一个原始指针，无引用计数，比shared_ptr轻量
+// 成员只有一个原始指针
 // delete 拷贝构造 & 赋值，从语法层面杜绝共享
 // 靠移动语义转移资源所有权，原智能指针置空
 // 析构直接delete指向内存，出作用域自动释放
-// 常用接口底层逻辑
-// get()：直接返回内部裸指针
-// release()：交出指针地址，自身置空，不释放内存
-// reset()：先删旧资源，再指向新地址
 
 template<typename T>
 class MyUniquePtr

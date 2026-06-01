@@ -136,6 +136,24 @@ DFS(节点u){
 }
 */
 
+/*
+DFS(节点u){
+    访问节点u
+    标记已访问
+    if (终止条件) {
+        记录答案
+        回溯
+        return;
+    }
+    for(u 的每一个邻接节点 v){
+        if(v 未被访问){
+            DFS(v)
+        }
+    }
+    回溯
+}
+*/
+
 void PreOrderStack(TreeNode *root)
 {
     if (root == nullptr)
